@@ -4,51 +4,55 @@ from .models import Task
 from .forms import TaskForm
 from django.http import HttpResponse
 
-#タスクの一覧表示
-@login_required
+# タスクの一覧を表示するビュー
+@login_required  # ログインしているユーザーのみアクセス可能
 def task_list(request):
+    # ログインユーザーに紐づくタスクを取得し、期限順に並べる
     tasks = Task.objects.filter(username=request.user).order_by('deadline')
     return render(request, 'tasks/index.html', {'tasks': tasks})
 
-#タスクの新規作成
+# タスクの新規作成を行うビュー
 @login_required
 def task_create(request):
-    if request.method == 'POST':
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = form.save(commit=False)
-            task.username = request.user  #ログインユーザーを紐づける
-            task.save()
-            return redirect('tasks_list')
+    if request.method == 'POST':  # フォームが送信された場合
+        form = TaskForm(request.POST)  # フォームのデータを取得
+        if form.is_valid():  # バリデーションチェック
+            task = form.save(commit=False)  # データを保存せずにインスタンスを作成
+            task.username = request.user  # ログインユーザーをタスクの作成者として設定
+            task.save()  # タスクを保存
+            return redirect('tasks_list')  # タスク一覧画面へリダイレクト
     else:
-        form = TaskForm()
-    return render(request, 'tasks/task_form.html', {'form': form})
+        form = TaskForm()  # フォームを新規作成
+    return render(request, 'tasks/task_form.html', {'form': form})  # フォームを表示
 
-#タスクの編集
+# タスクの編集を行うビュー
 @login_required
 def task_update(request, task_id):
+    # 指定されたIDのタスクを取得し、ログインユーザーのタスクであることを確認
     task = get_object_or_404(Task, id=task_id, username=request.user)
-    if request.method == 'POST':
-        form = TaskForm(request.POST, instance=task)
-        if form.is_valid():
-            form.save()
-            return redirect('tasks_list')
+    if request.method == 'POST':  # フォームが送信された場合
+        form = TaskForm(request.POST, instance=task)  # 既存のタスクをフォームに適用
+        if form.is_valid():  # バリデーションチェック
+            form.save()  # 変更を保存
+            return redirect('tasks_list')  # タスク一覧画面へリダイレクト
     else:
-        form = TaskForm(instance=task)
-    return render(request, 'tasks/task_form.html', {'form': form})
+        form = TaskForm(instance=task)  # 既存のタスク情報をフォームにセット
+    return render(request, 'tasks/task_form.html', {'form': form})  # フォームを表示
 
-#タスクの削除
+# タスクの削除を行うビュー
 @login_required
 def task_delete(request, task_id):
+    # 指定されたIDのタスクを取得し、ログインユーザーのタスクであることを確認
     task = get_object_or_404(Task, id=task_id, username=request.user)
-    if request.method == 'POST':
-        task.delete()
-        return redirect('task_list')
-    return render(request, 'tasks/task_confirm_delete.html', {'task': task})
+    if request.method == 'POST':  # 削除が確定した場合
+        task.delete()  # タスクを削除
+        return redirect('task_list')  # タスク一覧画面へリダイレクト
+    return render(request, 'tasks/task_confirm_delete.html', {'task': task})  # 確認画面を表示
 
+# シンプルなインデックスページ
+# 動作確認用のHello World表示
 
 def index(req):
-  return HttpResponse('Hello World')
-
+    return HttpResponse('Hello World')
 
 # Create your views here.
