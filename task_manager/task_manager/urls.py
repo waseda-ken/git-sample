@@ -16,8 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('tasks.urls')),  # tasksアプリのURLを追加
+    path('', views.task_list, name='task_list'),  # タスク一覧
+    path('calendar/', views.task_calendar, name='task_calendar'),  # カレンダー表示（追加）
+    path('create/', views.task_create, name='task_create'),  # タスク作成
+    path('<int:task_id>/edit/', views.task_update, name='task_update'),  # タスク編集
+    path('<int:task_id>/delete/', views.task_delete, name='task_delete'),  # タスク削除
 ]

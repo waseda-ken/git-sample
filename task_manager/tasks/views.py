@@ -4,6 +4,12 @@ from .models import Task
 from .forms import TaskForm
 from django.http import HttpResponse
 
+import json
+from django.utils.dateformat import DateFormat
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Task
+
 # タスクの一覧を表示するビュー
 @login_required  # ログインしているユーザーのみアクセス可能
 def task_list(request):
@@ -55,4 +61,33 @@ def task_delete(request, task_id):
 def index(req):
     return HttpResponse('Hello World')
 
-# Create your views here.
+
+# カレンダービュー：タスクをカレンダー形式で表示する
+@login_required
+def task_calendar(request):
+    # ログイン中ユーザーのタスクを取得
+    tasks = Task.objects.filter(user=request.user)
+
+    # FullCalendar用のイベントリストを作成
+    events = []
+    for task in tasks:
+        if task.due_date:
+            events.append({
+                'title': task.title,  # カレンダー上に表示するタスク名
+                'start': DateFormat(task.due_date).format('Y-m-d'),  # 日付（YYYY-MM-DD形式）
+                'color': get_priority_color(task.priority),  # 優先度に応じた色を設定
+            })
+
+    # JSON形式のデータをテンプレートへ渡して表示
+    return render(request, 'tasks/calendar.html', {
+        'events_json': json.dumps(events)
+    })
+
+# 優先度に応じた色を返す関数
+def get_priority_color(priority):
+    if priority == 'high':
+        return 'red'
+    elif priority == 'medium':
+        return 'green'
+    else:
+        return 'blue'  # 'low'の場合

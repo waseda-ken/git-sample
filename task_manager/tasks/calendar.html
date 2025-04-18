@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>タスクカレンダー</h2>
+
+<!-- カレンダー表示部分 -->
+<div id="calendar"></div>
+
+<!-- FullCalendarのCSS（スタイル）を読み込み -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+
+<!-- FullCalendarのJS（機能）を読み込み -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // カレンダーを描画するHTML要素を取得
+    var calendarEl = document.getElementById('calendar');
+
+    // FullCalendarインスタンスの生成と設定
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',  // 月間カレンダー表示
+      events: JSON.parse('{{ events_json|safe }}') // Pythonから渡されたタスク情報を読み込む
+    }); // Ensure this line properly closes the calendar configuration
+
+    // カレンダーを画面に表示
+    calendar.render();
+  });
+</script>
+{% endblock %}
