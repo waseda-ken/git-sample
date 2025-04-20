@@ -13,6 +13,14 @@ from .models import Task
 # タスクの一覧を表示するビュー
 @login_required  # ログインしているユーザーのみアクセス可能
 def task_list(request):
+
+    """
+    タスク一覧表示ビュー。
+    - ログインユーザーのTaskを取得
+    - 作成日時の新しい順にソート
+    - 'tasks/task_list.html' に tasks を渡して描画
+    """
+
     # ログインユーザーに紐づくタスクを取得し、期限順に並べる
     tasks = Task.objects.filter(username=request.user).order_by('deadline')
     return render(request, 'tasks/index.html', {'tasks': tasks})
@@ -20,6 +28,13 @@ def task_list(request):
 # タスクの新規作成を行うビュー
 @login_required
 def task_create(request):
+
+    """
+    タスク作成ビュー。
+    - GET: 空のフォームを表示
+    - POST: 送信データでフォームをバリデーション→保存
+    """
+
     if request.method == 'POST':  # フォームが送信された場合
         form = TaskForm(request.POST)  # フォームのデータを取得
         if form.is_valid():  # バリデーションチェック
@@ -34,8 +49,16 @@ def task_create(request):
 # タスクの編集を行うビュー
 @login_required
 def task_update(request, task_id):
+
+    """
+    タスク編集ビュー。
+    - GET: 既存 Task をフォームにセットして表示
+    - POST: フォーム送信→更新保存
+    """
+
     # 指定されたIDのタスクを取得し、ログインユーザーのタスクであることを確認
     task = get_object_or_404(Task, id=task_id, username=request.user)
+
     if request.method == 'POST':  # フォームが送信された場合
         form = TaskForm(request.POST, instance=task)  # 既存のタスクをフォームに適用
         if form.is_valid():  # バリデーションチェック
@@ -48,18 +71,19 @@ def task_update(request, task_id):
 # タスクの削除を行うビュー
 @login_required
 def task_delete(request, task_id):
+
+    """
+    タスク削除ビュー。
+    - GET: 確認画面を表示
+    - POST: 削除実行→一覧へリダイレクト
+    """
+
     # 指定されたIDのタスクを取得し、ログインユーザーのタスクであることを確認
     task = get_object_or_404(Task, id=task_id, username=request.user)
     if request.method == 'POST':  # 削除が確定した場合
         task.delete()  # タスクを削除
         return redirect('task_list')  # タスク一覧画面へリダイレクト
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})  # 確認画面を表示
-
-# シンプルなインデックスページ
-# 動作確認用のHello World表示
-
-def index(req):
-    return HttpResponse('Hello World')
 
 
 # カレンダービュー：タスクをカレンダー形式で表示する
