@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}
+  {% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}タスク編集{% else %}タスク作成{% endif %}</h2>
+
+<form method="post" class="mb-3">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <!-- タスク名 -->
+  <div class="mb-3">
+    {{ form.title.label_tag }}
+    {{ form.title }}
+    {{ form.title.errors }}
+    <div class="form-text">{{ form.fields.title.help_text }}</div>
+  </div>
+
+  <!-- 詳細 -->
+  <div class="mb-3">
+    {{ form.description.label_tag }}
+    {{ form.description }}
+    {{ form.description.errors }}
+    <div class="form-text">{{ form.fields.description.help_text }}</div>
+  </div>
+
+  <!-- 締切日 -->
+  <div class="mb-3">
+    {{ form.due_date.label_tag }}
+    {{ form.due_date }}
+    {{ form.due_date.errors }}
+    <div class="form-text">{{ form.fields.due_date.help_text }}</div>
+  </div>
+
+  <!-- 優先度 -->
+  <div class="mb-3">
+    {{ form.priority.label_tag }}
+    {{ form.priority }}
+    {{ form.priority.errors }}
+    <div class="form-text">{{ form.fields.priority.help_text }}</div>
+  </div>
+
+  <!-- 完了フラグ -->
+  <div class="form-check mb-3">
+    {{ form.completed }}
+    {{ form.completed.label_tag }}
+    {{ form.completed.errors }}
+    <div class="form-text">{{ form.fields.completed.help_text }}</div>
+  </div>
+
+  <!-- 作成日時（読み取り専用にするのがおすすめ） -->
+  <div class="mb-3">
+    {{ form.created_at.label_tag }}
+    <!-- readonly属性を付ければ編集不可 -->
+    {{ form.created_at.as_widget(attrs={'readonly': 'readonly'}) }}
+    <div class="form-text">{{ form.fields.created_at.help_text }}</div>
+  </div>
+
+  <!-- 更新日時（読み取り専用） -->
+  <div class="mb-3">
+    {{ form.updated_at.label_tag }}
+    {{ form.updated_at.as_widget(attrs={'readonly': 'readonly'}) }}
+    <div class="form-text">{{ form.fields.updated_at.help_text }}</div>
+  </div>
+
+  <!-- 保存・キャンセル -->
+  <button type="submit" class="btn btn-success">保存</button>
+  <a href="{% url 'task_list' %}" class="btn btn-secondary">キャンセル</a>
+</form>
+{% endblock %}
