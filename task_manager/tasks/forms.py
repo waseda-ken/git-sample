@@ -11,6 +11,7 @@ class TaskForm(forms.ModelForm):
         # フォームに表示するモデルのフィールドを列挙
         fields = ['title','description','due_date','priority','completed','created_at','updated_at']
         # フォームのラベルを日本語に変更
+
         labels = {
             'title': 'タスク名',
             'description': '詳細',
@@ -20,6 +21,7 @@ class TaskForm(forms.ModelForm):
             'created_at': '作成日時',
             'updated_at': '更新日時'
         }
+
         # フォームのヘルプテキストを日本語に変更
         help_texts = {
             'title': 'タスクのタイトルを入力してください。',
@@ -49,19 +51,39 @@ class TaskForm(forms.ModelForm):
 
         # 各フィールドに対応するHTMLウィジェットと属性を指定
         widgets = {
-            'title': forms.TextInput(        # 単行テキスト入力
+            # 単業テキスト入力
+            'title': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'タイトルを入力'}
             ),
-            'description': forms.Textarea(   # 複数行テキスト入力
+
+            # 複数行テキスト入力
+            'description': forms.Textarea(
                 attrs={'class': 'form-control', 'rows': 3, 'placeholder': '詳細を入力（任意）'}
             ),
-            'due_date': forms.DateInput(     # カレンダー付き日付入力
+
+            # カレンダー付き日付入力
+            'due_date': forms.DateInput(
                 attrs={'type': 'date', 'class': 'form-control'}
             ),
-            'priority': forms.Select(        # ドロップダウン選択
+
+            # ドロップダウン選択
+            'priority': forms.Select(
                 attrs={'class': 'form-select'}
             ),
-            'completed': forms.CheckboxInput(  # チェックボックス
+
+            # チェックボックス
+            'completed': forms.CheckboxInput(
                 attrs={'class': 'form-check-input'}
             ),
+
+            # 作成日時
+            'created_at': forms.DateInput(
+                attrs={'type': 'datetime-local', 'class': 'form-control'}
+            ),
+            
+            # 更新日時
+            'updated_at': forms.DateInput(
+                attrs={'type': 'datetime-local', 'class': 'form-control'}
+            ),
+
         }
