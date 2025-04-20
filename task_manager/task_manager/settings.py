@@ -31,6 +31,13 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+# ログイン後のリダイレクト先
+LOGIN_REDIRECT_URL = '/tasks/'
+
+# ログインページの URL
+LOGIN_URL = '/accounts/login/'
+
+
 # アプリケーション定義
 INSTALLED_APPS = [
     'django.contrib.admin',
