@@ -23,10 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fsq-++d(v6anad&6kc4&tan%_0w-ad7%ur7-o#-xnnppcb!j^y'
 
 # セキュリティ上の注意: 本番環境では DEBUG を False にすること！
-DEBUG = False
+DEBUG = True
 
 # 許可するホスト (デプロイ時には適切に設定すること)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 # アプリケーション定義
 INSTALLED_APPS = [

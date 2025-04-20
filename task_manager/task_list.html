@@ -1,67 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mb-3">タスク一覧</h2>
-<a href="{% url 'task_create' %}" class="btn btn-primary mb-3">タスクを追加</a>
+  <!-- ページタイトル -->
+  <h2 class="mb-3">タスク一覧</h2>
 
-<ul class="list-group">
-  {% for task in tasks %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <span>
-        {{ task.title }}
-        {% if task.completed %}
-          <span class="badge bg-success ms-2">完了</span>
-        {% endif %}
-      </span>
-      <span>
-        <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-primary">編集</a>
-        <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-danger">削除</a>
-      </span>
-    </li>
-  {% endfor %}
-</ul>
-{% endblock %}
+  <!-- 新規作成ボタン -->
+  <a href="{% url 'task_create' %}" class="btn btn-primary mb-3">タスクを追加</a>
 
-<span
-  class="{% if task.completed %}text-muted text-decoration-line-through{% endif %}">
-  {{ task.title }}
-</span>
-{% if task.completed %}
-  <span class="badge bg-success">完了</span>
-{% endif %}
+  <!-- 完了済タスクの表示/非表示切替ボタン -->
+  <button id="toggle-completed" class="btn btn-secondary mb-3">
+    完了済を表示/非表示
+  </button>
 
-## 完了済みタスクを非表示にするためのJavaScript
-<style>
-  .completed-task {
-    display: none;
-  }
-</style>
+  <!-- タスク一覧 -->
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="
+            list-group-item 
+            d-flex justify-content-between align-items-center
+            {% if task.completed %}completed-task{% endif %}
+          ">
+        <!-- タイトルと完了バッジ -->
+        <div>
+          <span{% if task.completed %} class="text-decoration-line-through text-muted"{% endif %}>
+            {{ task.title }}
+          </span>
+          {% if task.completed %}
+            <span class="badge bg-success ms-2">完了</span>
+          {% endif %}
+        </div>
+        <!-- 編集／削除リンク -->
+        <div>
+          <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-primary">編集</a>
+          <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-danger">削除</a>
+        </div>
+      </li>
+    {% empty %}
+      <!-- タスクが一件もないとき -->
+      <li class="list-group-item">現在タスクはありません。</li>
+    {% endfor %}
+  </ul>
 
+  <!-- ▼ 完了済タスク非表示用のスタイル -->
+  <style>
+    /* .completed-task クラスが付いた要素を初期状態で非表示 */
+    .completed-task {
+      display: none;
+    }
+  </style>
 
-{% block content %}
-<h2 class="mb-3">タスク一覧</h2>
-<a href="{% url 'task_create' %}" class="btn btn-primary mb-3">タスクを追加</a>
-<ul class="list-group">
-  {% for task in tasks %}
-    <li class="list-group-item d-flex justify-content-between align-items-center {% if task.completed %}completed-task{% endif %}">
-      <span>
-        {{ task.title }}
-        {% if task.completed %}
-          <span class="badge bg-success ms-2">完了</span>
-        {% endif %}
-      </span>
-      <span>
-        <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-primary">編集</a>
-        <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-danger">削除</a>
-      </span>
-    </li>
-  {% endfor %}
-<button onclick="toggleCompleted()">完了済を表示/非表示</button>
-
-<script>
-  function toggleCompleted() {
-    document.querySelectorAll('.completed-task').forEach(el => {
-      el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+  <!-- ▼ 完了済タスク表示切替用スクリプト -->
+  <script>
+    document.getElementById('toggle-completed').addEventListener('click', function() {
+      // 全ての .completed-task を走査して、表示 ↔ 非表示 をトグル
+      document.querySelectorAll('.completed-task').forEach(function(el) {
+        el.style.display = (el.style.display === 'none') ? 'flex' : 'none';
+      });
     });
-  }
-</script>
+  </script>
+{% endblock %}

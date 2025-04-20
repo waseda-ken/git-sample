@@ -9,7 +9,7 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         # フォームに表示するモデルのフィールドを列挙
-        fields = ['title','description','due_date','priority','completed','created_at','updated_at']
+        fields = ['title','description','due_date','priority','completed']
         # フォームのラベルを日本語に変更
 
         labels = {
@@ -18,8 +18,6 @@ class TaskForm(forms.ModelForm):
             'due_date': '締切日',
             'priority': '優先度',
             'completed': '完了',
-            'created_at': '作成日時',
-            'updated_at': '更新日時'
         }
 
         # フォームのヘルプテキストを日本語に変更
@@ -29,8 +27,6 @@ class TaskForm(forms.ModelForm):
             'due_date': 'タスクの締切日を選択してください。',
             'priority': 'タスクの優先度を選択してください。',
             'completed': 'タスクが完了した場合はチェックを入れてください。',
-            'created_at': 'タスクが作成された日時です。',
-            'updated_at': 'タスクが最後に更新された日時です。'
         }
         # フォームのエラーメッセージを日本語に変更
         error_messages = {
@@ -74,16 +70,6 @@ class TaskForm(forms.ModelForm):
             # チェックボックス
             'completed': forms.CheckboxInput(
                 attrs={'class': 'form-check-input'}
-            ),
-
-            # 作成日時
-            'created_at': forms.DateInput(
-                attrs={'type': 'datetime-local', 'class': 'form-control'}
-            ),
-            
-            # 更新日時
-            'updated_at': forms.DateInput(
-                attrs={'type': 'datetime-local', 'class': 'form-control'}
             ),
 
         }
