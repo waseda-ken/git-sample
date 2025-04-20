@@ -17,4 +17,4 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True) #更新日時
 
     def __str__(self):
-        return self.title
+        return self.title  # 管理画面などでタイトル表示用
