@@ -50,23 +50,5 @@
     <div class="form-text">{{ form.fields.completed.help_text }}</div>
   </div>
 
-  <!-- 作成日時（読み取り専用にするのがおすすめ） -->
-  <div class="mb-3">
-    {{ form.created_at.label_tag }}
-    <!-- readonly属性を付ければ編集不可 -->
-    {{ form.created_at.as_widget(attrs={'readonly': 'readonly'}) }}
-    <div class="form-text">{{ form.fields.created_at.help_text }}</div>
-  </div>
-
-  <!-- 更新日時（読み取り専用） -->
-  <div class="mb-3">
-    {{ form.updated_at.label_tag }}
-    {{ form.updated_at.as_widget(attrs={'readonly': 'readonly'}) }}
-    <div class="form-text">{{ form.fields.updated_at.help_text }}</div>
-  </div>
-
-  <!-- 保存・キャンセル -->
-  <button type="submit" class="btn btn-success">保存</button>
-  <a href="{% url 'task_list' %}" class="btn btn-secondary">キャンセル</a>
 </form>
 {% endblock %}

@@ -22,7 +22,7 @@ def task_list(request):
     """
 
     # ログインユーザーに紐づくタスクを取得し、期限順に並べる
-    tasks = Task.objects.filter(username=request.user).order_by('deadline')
+    tasks = Task.objects.filter(username=request.user).order_by('due_date')
     return render(request, 'tasks/index.html', {'tasks': tasks})
 
 # タスクの新規作成を行うビュー
